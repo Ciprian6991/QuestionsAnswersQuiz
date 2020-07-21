@@ -35,3 +35,28 @@ function getNewQuiz(){
     state.page ="create";
     refresh();
 }
+
+function showQuizzez(){
+    
+}
+
+function refresh(){
+    switch(state.page)
+    {
+        case "home":
+            {
+                if(state.allQuizzez.length != 0){
+                
+                    showQuizzez();
+                }break;
+            }
+            
+        case "create":
+            window.location="create.html";
+            break;
+
+        default: break;
+    }
+}
+
+refresh();
