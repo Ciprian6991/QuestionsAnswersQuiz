@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create</title>
+    
 </head>
 <body>
+    <form action="/action_page.php" id="writeroot">
+        <br> <br> <br> <br>
+        Forms Name: <input type="text" name="usrname">
+      </form>
+        <br> <br> <br> <br>
+
+    <div id="readroot" style="display: none">
+
+        <input type="button" value="Remove the question bellow"
+        onclick="this.parentNode.parentNode.removeChild(this.parentNode);" /><br /><br />
     
+        <fieldset form="form1">
+            <label for="question">Ask a new question:</label>
+            <input type="text" id="fname" name="fname" form="form1"><br><br>
+        </fieldset>
+    
+    </div>
+    
+    <form method="post" action="">
+    
+        <span id="writeroot"></span>
+    
+        <input type="button" value="Give me one more question field" onclick="moreFields()"/>
+        <input type="submit" value="Save form"  onclick="getFormResult()"/>
+    
+    </form> 
+
+    
+    <script src="addFields.js"></script>
 </body>
 </html>
