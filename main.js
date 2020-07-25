@@ -2,15 +2,16 @@ const state = {
     page:"home",
     allQuizzez:[]
 }
-var headerContainer = document.getElementById('Header');
-headerContainer.appendChild(getHeader());
+var headerContainer = document.getElementById('root');
 
-var quizzezContainer = document.getElementById('Quizzes');
-var createNewQueez = document.getElementById('Create');
-var runQuizzez = document.getElementById('Run');
 
-function addTagNode(tag, atrr, childNodes){
+function e(tag, atrr, childNodes){
     const node = document.createElement(tag);
+
+    for (const property in atrr) {
+        node.setAttribute(property, atrr[property]);
+      }
+
     childNodes = childNodes || [];
     childNodes = typeof childNodes == "string"
         ? [childNodes]
@@ -22,18 +23,15 @@ function addTagNode(tag, atrr, childNodes){
     return node;
 }
 
-function getHeader() {
-    return addTagNode("header", {},
-                    [addTagNode("h1", {}, ["QUIZZEZ"]),
-                    addTagNode("p", {}, ["Click Add to create a new quiz"]),
-                    addTagNode("p", {}, ["Click Edit to edit existing quiz"]),
-                    addTagNode("p", {}, ["Click Run to run selected quiz"])]
+function Header() {
+    var header =  e("header", {},
+                    [e("h1", {}, ["QUIZZEZ"]),
+                    e("p", {["style"]:["color:red"]}, ["Click Add to create a new quiz"]),
+                    e("p", {["style"]:["color:yellow"]}, ["Click Edit to edit existing quiz"]),
+                    e("p", {["style"]:["color:blue"]}, ["Click Run to run selected quiz"])]
                     );
-}
 
-function getNewQuiz(){
-    state.page ="create";
-    refresh();
+    headerContainer.appendChild(header);
 }
 
 function showQuizzez(){
@@ -45,14 +43,10 @@ function refresh(){
     {
         case "home":
             {
-                if(state.allQuizzez.length != 0){
-                
-                    showQuizzez();
-                }break;
+                Header();
             }
             
         case "create":
-            window.location="create.html";
             break;
 
         default: break;

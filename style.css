@@ -4,14 +4,14 @@ body {
     background-color: rgb(214, 192, 193);
   }
   
-  #Header{
+ header{
     border: 1px solid black;
     padding: 25px ;
     background-color: rgb(23, 130, 230);
     text-align: center;
   }
   
-  #Create{
+ button{
     background-color: #000e0e;
     border: none;
     color: white;
