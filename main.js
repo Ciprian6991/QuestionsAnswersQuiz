@@ -23,31 +23,117 @@ function e(tag, atrr, childNodes){
     return node;
 }
 
-function Header() {
+function HeaderHome() {
+    headerContainer.innerHTML=''
+
     var header =  e("header", {},
                     [e("h1", {}, ["QUIZZEZ"]),
-                    e("p", {["style"]:["color:red"]}, ["Click Add to create a new quiz"]),
+                    e("p", {["style"]:["color:red"]}, ["Click Add quiz to create a new quiz"]),
                     e("p", {["style"]:["color:yellow"]}, ["Click Edit to edit existing quiz"]),
-                    e("p", {["style"]:["color:blue"]}, ["Click Run to run selected quiz"])]
+                    e("p", {["style"]:[]}, ["Click Run to run selected quiz"])]
                     );
 
     headerContainer.appendChild(header);
 }
 
-function showQuizzez(){
+function Quizzez(){
+    if(state.allQuizzez.length == 0)
+    {
+         let empty = e("header", {"id":"empty"},[e("b", {}, ["No input yet"])]);
+
+        headerContainer.appendChild(empty);
+    }
+}
+
+function NewQUiz(){
+    state.page='create'
+    refresh();
     
 }
 
+function Submit(){
+    console.log("am apasat pe submit")
+    var form = document.getElementById('readroot');
+    var text = form['usrtitle'];
+    let usrName = text.value;
+
+    var form = document.querySelectorAll('writeroot')
+    console.log(form)
+
+    state.allQuizzez = {name:usrName, questions:[quest], answers:[]}
+
+}
+
+function MoreFields(){
+    let question = QuestionForm()
+    
+    var insertHere = document.getElementById('addquestion');
+    insertHere.parentNode.insertBefore(question,insertHere);
+}
+
+function AddButton(){
+    var button = e ("input", {"type":"button", "value":"Add quiz", "onclick" : "NewQUiz()"},)
+    headerContainer.appendChild(button);
+}
+
+function SubmitButton(){
+    var button = e ("input", {"type":"button", "value":"Submit", "onclick" : "Submit()"},)
+    headerContainer.appendChild(button);
+}
+
+function MoreQuestionsButton(){
+    var button = e ("input", {"type":"button","id":"addquestion", "value":"Add question", "onclick" : "MoreFields()"},)
+    headerContainer.appendChild(button);
+}
+
+function HeaderCreate(){
+    headerContainer.innerHTML=''
+    var headerCreate =  e("header", {},[e("h1", {}, ["Create"])])
+    headerContainer.appendChild(headerCreate);
+}
+
+function QuestionForm()
+{
+    var question =  e('form',{'id':'writeroot'},
+                    [e("h5", {["style"]:["float:left"]}, ["New question: "]),
+                    e('input', {'type':'text', 'name':'question'},)]);
+
+    return question
+}
+
+function Form(){
+    var nameForm = e('form',{'id':'readroot'},
+                [e("h3", {}, ["TITLE: "]),
+                e('input', {'type':'text', 'name':'usrtitle'},)]);
+    headerContainer.appendChild(nameForm)
+
+    var question =  QuestionForm()
+
+    headerContainer.appendChild(question)
+}
+
 function refresh(){
+
     switch(state.page)
     {
         case "home":
             {
-                Header();
+                
+                HeaderHome()
+                AddButton()
+                Quizzez()
+                break   
             }
             
         case "create":
-            break;
+            {   
+                HeaderCreate()
+                SubmitButton();
+                Form()
+                MoreQuestionsButton()
+                break
+            }
+            
 
         default: break;
     }

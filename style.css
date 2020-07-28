@@ -6,23 +6,76 @@ body {
   
  header{
     border: 1px solid black;
-    padding: 25px ;
+    padding: 25px 300px ;
     background-color: rgb(23, 130, 230);
     text-align: center;
+    float: left;
   }
   
- button{
+ input{
     background-color: #000e0e;
     border: none;
     color: white;
     padding: 15px 32px;
     text-align: center;
+    float:right;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-    margin: 50px 10px;
+    margin: 80px 10px;
     cursor: pointer;
     }
+
+  input[name]{
+    background-color: #f7f7f7;
+    border: none;
+    color: rgb(119, 0, 0);
+    padding: 0;
+    margin: 0;
+    float: left;
+    text-decoration: none;
+    font-size: 20px;
+  
+    }
+
+
+  #writeroot{
+    clear: both;
+      background-color: #b40000;
+      border: none;
+      color: rgb(119, 0, 0);
+      padding: 20px 10px;
+      margin: 10px;
+      width: 70%;
+      text-decoration: none;
+      font-size: 20px;
+    
+      }
+
+    input[name^="question"]{
+    font-size: 25px;
+    width: 80%;
+    float:right;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  form{
+    
+    float: left;
+    text-decoration: none;
+    margin-left: 6px;
+    padding-bottom: 30px;
+    
+  }
+
+  #empty{
+    float:right;
+    padding: 15px 32px;
+    margin: 80px 10px;
+    }
+
+
   /*
     #Quizzes {
       background-color: tomato;
