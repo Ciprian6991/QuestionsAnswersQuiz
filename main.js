@@ -71,6 +71,11 @@ function MoreFields(){
     insertHere.parentNode.insertBefore(question,insertHere);
 }
 
+function DeleteField(atr){
+    var node = document.getElementById(atr.id)
+    node.remove()
+}
+
 function AddButton(){
     var button = e ("input", {"type":"button", "value":"Add quiz", "onclick" : "NewQUiz()"},)
     headerContainer.appendChild(button);
@@ -86,6 +91,12 @@ function MoreQuestionsButton(){
     headerContainer.appendChild(button);
 }
 
+function DeleteQuestionButton(){
+    var button = e ("input", {"type":"button","id":"deleteQuestion", "value":"Delete question", "onclick" : "DeleteField(this.parentNode)"},)
+
+    return button
+}
+
 function HeaderCreate(){
     headerContainer.innerHTML=''
     var headerCreate =  e("header", {},[e("h1", {}, ["Create"])])
@@ -94,9 +105,11 @@ function HeaderCreate(){
 
 function QuestionForm()
 {
+    var deleteButton = DeleteQuestionButton()
     var question =  e('form',{'id':'writeroot'},
                     [e("h5", {["style"]:["float:left"]}, ["New question: "]),
-                    e('input', {'type':'text', 'name':'question'},)]);
+                    e('input', {'type':'text', 'name':'question'},),
+                    deleteButton]);
 
     return question
 }
