@@ -38,7 +38,7 @@ body {
     }
 
 
-  #writeroot{
+  form[id^="writeroot"]{
     clear: both;
       background-color: #b40000;
       border: none;
@@ -85,6 +85,28 @@ body {
     padding: 15px 32px;
     margin: 40px 10px;
     }
+
+  header[id^="questionTag"]{
+    border: 1px solid black;
+    padding: 25px 28px ;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    float:left;
+    margin-top: 10px;
+    margin-left: 15px;
+    
+  }
+
+  header[id^="questionsTags"]{
+    border: 1px solid black;
+    padding: 25px 28px ;
+    background-color: rgb(247, 151, 151);
+    text-align: center;
+    float:left;
+    margin-top: 10px;
+    margin-left: 15px;
+    
+  }
 
     h5 {
       color: rgb(0, 0, 0);

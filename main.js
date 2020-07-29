@@ -1,7 +1,10 @@
 const state = {
     page:"home",
-    allQuizzez:[]
+    allQuizzez: []
 }
+
+var questionsCounter = 0
+
 var headerContainer = document.getElementById('root');
 
 
@@ -35,14 +38,38 @@ function HeaderHome() {
 
     headerContainer.appendChild(header);
 }
+function isEmpty(arg)
+{
+    for(var key in arg) {
+        if(arg.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
 function Quizzez(){
-    if(state.allQuizzez.length == 0)
+    if(isEmpty(state.allQuizzez))
     {
          let empty = e("header", {"id":"empty"},[e("b", {}, ["No input yet"])]);
 
         headerContainer.appendChild(empty);
     }
+    else{
+        var quizzzez = e("header", {"id":"questionsTags"});
+        for (var key in state.allQuizzez) {
+            var questionArticle = e("header", {"id":"questionTag"},
+                                    [e("h1", {}, [key]),
+                                    e ("input", {"type":"button", "value":"EDIT", "onclick" : "EditQUiz()"},),
+                                    e ("input", {"type":"button", "value":"RUN", "onclick" : "RUN()"},),]);
+            quizzzez.appendChild(questionArticle)
+          }
+        headerContainer.appendChild(quizzzez)
+    }
+}
+
+function RUN(){
+    state.page='Run'
+    refresh();
 }
 
 function NewQUiz(){
@@ -51,21 +78,30 @@ function NewQUiz(){
     
 }
 
+function BackHome()
+{
+    state.page = 'home'
+    refresh()
+}
+
 function Submit(){
-    console.log("am apasat pe submit")
     var form = document.getElementById('readroot');
     var text = form['usrtitle'];
-    let usrName = text.value;
+    var titleName = text.value;
 
-    var form = document.querySelectorAll('writeroot')
-    console.log(form)
-
-    state.allQuizzez = {name:usrName, questions:[quest], answers:[]}
+    var form = document.querySelectorAll('input[name="question"]')
+    var usrQuestions = []
+    form.forEach(element => usrQuestions.push(element.value))
+    state.allQuizzez[titleName]=[usrQuestions]
+    alert("QUiz submited!")
 
 }
 
 function MoreFields(){
-    let question = QuestionForm()
+
+    questionsCounter++
+    question = QuestionForm();
+    question.id = question.id + questionsCounter;
     
     var insertHere = document.getElementById('addquestion');
     insertHere.parentNode.insertBefore(question,insertHere);
@@ -74,6 +110,11 @@ function MoreFields(){
 function DeleteField(atr){
     var node = document.getElementById(atr.id)
     node.remove()
+}
+
+function BackButton(){
+    var button = e ("input", {"type":"button", "value":"Home", "onclick" : "BackHome()"},)
+    headerContainer.appendChild(button);
 }
 
 function AddButton(){
@@ -95,6 +136,12 @@ function DeleteQuestionButton(){
     var button = e ("input", {"type":"button","id":"deleteQuestion", "value":"Delete question", "onclick" : "DeleteField(this.parentNode)"},)
 
     return button
+}
+
+function HeaderRun(){
+    headerContainer.innerHTML=''
+    var headerCreate =  e("header", {},[e("h1", {}, ["RUN"])])
+    headerContainer.appendChild(headerCreate);
 }
 
 function HeaderCreate(){
@@ -142,9 +189,16 @@ function refresh(){
             {   
                 HeaderCreate()
                 SubmitButton();
+                BackButton()
                 Form()
                 MoreQuestionsButton()
                 break
+            }
+
+        case "Run":
+            {
+                HeaderRun()
+
             }
             
 
