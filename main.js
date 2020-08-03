@@ -45,8 +45,9 @@ function HeaderHome() {
 
     headerContainer.appendChild(header);
 }
+
 function isEmpty(arg) {
-    for (var key in arg) {
+    for (let key in arg) {
         if (arg.hasOwnProperty(key))
             return false;
     }
@@ -60,8 +61,8 @@ function Quizzez() {
         headerContainer.appendChild(empty);
     }
     else {
-        var quizzzez = e("header", { "id": "questionsTags" });
-        for (var key in state.allQuizzez) {
+        let quizzzez = e("header", { "id": "questionsTags" });
+        for (let key in state.allQuizzez) {
             var questionArticle = e("header", { "id": "questionTag" },
                 [e("h1", {}, [key]),
                 e("input", { "type": "button", "value": "EDIT", "onclick": "EditQUiz()" },),
@@ -77,7 +78,7 @@ function RUN() {
     refresh();
 }
 
-function NewQUiz() {
+function NewQuiz() {
     state.page = 'create'
     refresh();
 
@@ -97,12 +98,11 @@ function Submit() {
     var usrQuestions = []
     form.forEach(element => usrQuestions.push(element.value))
     state.allQuizzez[titleName] = [usrQuestions]
-    alert("QUiz submited!")
+    BackHome()
 
 }
 
 function MoreFields() {
-
     questionsCounter++
     question = QuestionForm();
     question.id = question.id + questionsCounter;
@@ -111,52 +111,52 @@ function MoreFields() {
     insertHere.parentNode.insertBefore(question, insertHere);
 }
 
-function DeleteField(atr) {
-    var node = document.getElementById(atr.id)
+function DeleteField() {
+    let node = document.getElementById(this.parentNode.id)
     node.remove()
 }
 
-function BackButton() {
-    var button = e("input", { "type": "button", "value": "Home", "onclick": "BackHome()" },)
+function BackButton(clickHandler) {
+    var button = e("input", { "type": "button", "value": "Home", click: clickHandler },)
     headerContainer.appendChild(button);
 }
 
-function AddButton() {
-    var button = e("input", { "type": "button", "value": "Add quiz", "onclick": "NewQUiz()" },)
+function AddButton(clickHandler) {
+    var button = e("input", { "type": "button", "value": "Add quiz", click: clickHandler },)
     headerContainer.appendChild(button);
 }
 
 function SubmitButton(clickHandler) {
-    var button = e("input", { "type": "button", "value": "Submit", click: clickHandler },)
+    let button = e("input", { "type": "button", "value": "Submit", click: clickHandler },)
     headerContainer.appendChild(button);
 }
 
-function MoreQuestionsButton() {
-    var button = e("input", { "type": "button", "id": "addquestion", "value": "Add question", "onclick": "MoreFields()" },)
+function AddQuestionButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "addquestion", "value": "Add question", click: clickHandler },)
     headerContainer.appendChild(button);
 }
 
-function DeleteQuestionButton() {
-    var button = e("input", { "type": "button", "id": "deleteQuestion", "value": "Delete question", "onclick": "DeleteField(this.parentNode)" },)
+function DeleteQuestionButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "deleteQuestion", "value": "Delete question", click: clickHandler },)
 
     return button
 }
 
 function HeaderRun() {
     headerContainer.innerHTML = ''
-    var headerCreate = e("header", {}, [e("h1", {}, ["RUN"])])
+    let headerCreate = e("header", {}, [e("h1", {}, ["RUN"])])
     headerContainer.appendChild(headerCreate);
 }
 
 function HeaderCreate() {
     headerContainer.innerHTML = ''
-    var headerCreate = e("header", {}, [e("h1", {}, ["Create"])])
+    let headerCreate = e("header", {}, [e("h1", {}, ["Create"])])
     headerContainer.appendChild(headerCreate);
 }
 
 function QuestionForm() {
-    var deleteButton = DeleteQuestionButton()
-    var question = e('form', { 'id': 'writeroot' },
+    let deleteButton = DeleteQuestionButton(DeleteField)
+    let question = e('form', { 'id': 'writeroot' },
         [e("h5", { ["style"]: ["float:left"] }, ["New question: "]),
         e('input', { 'type': 'text', 'name': 'question' },),
             deleteButton]);
@@ -165,12 +165,12 @@ function QuestionForm() {
 }
 
 function Form() {
-    var nameForm = e('form', { 'id': 'readroot' },
+    let nameForm = e('form', { 'id': 'readroot' },
         [e("h3", {}, ["TITLE: "]),
         e('input', { 'type': 'text', 'name': 'usrtitle' },)]);
     headerContainer.appendChild(nameForm)
 
-    var question = QuestionForm()
+    let question = QuestionForm()
 
     headerContainer.appendChild(question)
 }
@@ -182,7 +182,7 @@ function refresh() {
             {
 
                 HeaderHome()
-                AddButton()
+                AddButton(NewQuiz)
                 Quizzez()
                 break
             }
@@ -191,9 +191,9 @@ function refresh() {
             {
                 HeaderCreate()
                 SubmitButton(Submit);
-                BackButton()
+                BackButton(BackHome)
                 Form()
-                MoreQuestionsButton()
+                AddQuestionButton(MoreFields)
                 break
             }
 
