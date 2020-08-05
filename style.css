@@ -86,7 +86,7 @@ body {
     margin: 40px 10px;
     }
 
-  header[id^="questionTag"]{
+  header[value^="questionTag"]{
     border: 1px solid black;
     padding: 25px 28px ;
     background-color: rgb(214, 192, 193);

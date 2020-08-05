@@ -63,10 +63,16 @@ function Quizzez() {
     else {
         let quizzzez = e("header", { "id": "questionsTags" });
         for (let key in state.allQuizzez) {
-            var questionArticle = e("header", { "id": "questionTag" },
+
+            let edit = EditQuizButton()
+            let run = RunQuizButton(RUN)
+            let del = DeleteQuizButton(DeleteQiuz)
+
+            var questionArticle = e("header", { "id": key, "value" : "questionTag" },
                 [e("h1", {}, [key]),
-                e("input", { "type": "button", "value": "EDIT", "onclick": "EditQUiz()" },),
-                e("input", { "type": "button", "value": "RUN", "onclick": "RUN()" },),]);
+                    del,
+                    edit,
+                    run]);
             quizzzez.appendChild(questionArticle)
         }
         headerContainer.appendChild(quizzzez)
@@ -74,18 +80,18 @@ function Quizzez() {
 }
 
 function RUN() {
-    state.page = 'Run'
+    state.page = "Run"
     refresh();
 }
 
 function NewQuiz() {
-    state.page = 'create'
+    state.page = "create"
     refresh();
 
 }
 
 function BackHome() {
-    state.page = 'home'
+    state.page = "home"
     refresh()
 }
 
@@ -112,8 +118,14 @@ function MoreFields() {
 }
 
 function DeleteField() {
-    let node = document.getElementById(this.parentNode.id)
+    let node = this.parentNode
     node.remove()
+}
+
+function DeleteQiuz(){
+    delete state.allQuizzez[this.parentNode.id];
+    this.parentNode.remove()
+    refresh()
 }
 
 function BackButton(clickHandler) {
@@ -138,6 +150,24 @@ function AddQuestionButton(clickHandler) {
 
 function DeleteQuestionButton(clickHandler) {
     let button = e("input", { "type": "button", "id": "deleteQuestion", "value": "Delete question", click: clickHandler },)
+
+    return button
+}
+
+function EditQuizButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "editQuiz", "value": "EDIT", click: clickHandler },)
+
+    return button
+}
+
+function RunQuizButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "runQuiz", "value": "RUN", click: clickHandler },)
+
+    return button
+}
+
+function DeleteQuizButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "deleteQuiz", "value": "DELETE", click: clickHandler },)
 
     return button
 }
