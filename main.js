@@ -5,7 +5,7 @@ const state = {
 
 var questionsCounter = 0
 
-var headerContainer = document.getElementById('root');
+var headerContainer = document.getElementById("root");
 
 
 function e(tag, atrr, childNodes) {
@@ -31,19 +31,6 @@ function e(tag, atrr, childNodes) {
         .forEach(n => node.appendChild(n));
 
     return node;
-}
-
-function HeaderHome() {
-    headerContainer.innerHTML = ''
-
-    var header = e("header", {},
-        [e("h1", {}, ["QUIZZEZ"]),
-        e("p", { ["style"]: ["color:red"] }, ["Click Add quiz to create a new quiz"]),
-        e("p", { ["style"]: ["color:yellow"] }, ["Click Edit to edit existing quiz"]),
-        e("p", { ["style"]: [] }, ["Click Run to run selected quiz"])]
-    );
-
-    headerContainer.appendChild(header);
 }
 
 function isEmpty(arg) {
@@ -95,12 +82,24 @@ function BackHome() {
     refresh()
 }
 
-function Submit() {
+function SubmitAnswerForm(){
     var form = document.getElementById('readroot');
     var text = form['usrtitle'];
     var titleName = text.value;
 
-    var form = document.querySelectorAll('input[name="question"]')
+    var form = document.querySelectorAll("input[name='question']")
+    var usrQuestions = []
+    form.forEach(element => usrQuestions.push(element.value))
+    state.allQuizzez[titleName] = [usrQuestions]
+    BackHome()
+}
+
+function SubmitQuestionForm() {
+    var form = document.getElementById('readroot');
+    var text = form['usrtitle'];
+    var titleName = text.value;
+
+    var form = document.querySelectorAll("input[name='question']")
     var usrQuestions = []
     form.forEach(element => usrQuestions.push(element.value))
     state.allQuizzez[titleName] = [usrQuestions]
@@ -113,7 +112,7 @@ function MoreFields() {
     question = QuestionForm();
     question.id = question.id + questionsCounter;
 
-    var insertHere = document.getElementById('addquestion');
+    var insertHere = document.getElementById("addquestion");
     insertHere.parentNode.insertBefore(question, insertHere);
 }
 
@@ -172,36 +171,58 @@ function DeleteQuizButton(clickHandler) {
     return button
 }
 
+function Header(headerHandler){
+    headerContainer.innerHTML=''
+
+    var header = headerHandler()
+    headerContainer.appendChild(header);
+}
+
+function HeaderHome() {
+
+    let header = e("header", {},
+        [e("h1", {}, ["QUIZZEZ"]),
+        e("p", { ["style"]: ["color:red"] }, ["Click Add quiz to create a new quiz"]),
+        e("p", { ["style"]: ["color:yellow"] }, ["Click Edit to edit existing quiz"]),
+        e("p", { ["style"]: [] }, ["Click Run to run selected quiz"])]
+    );
+
+    return header;
+}
+
 function HeaderRun() {
-    headerContainer.innerHTML = ''
-    let headerCreate = e("header", {}, [e("h1", {}, ["RUN"])])
-    headerContainer.appendChild(headerCreate);
+
+    let header = e("header", {}, [e("h1", {}, ["RUN"])])
+    return header
 }
 
 function HeaderCreate() {
-    headerContainer.innerHTML = ''
-    let headerCreate = e("header", {}, [e("h1", {}, ["Create"])])
-    headerContainer.appendChild(headerCreate);
+
+    let header = e("header", {}, [e("h1", {}, ["Create"])])
+    return header
 }
 
 function QuestionForm() {
     let deleteButton = DeleteQuestionButton(DeleteField)
     let question = e('form', { 'id': 'writeroot' },
         [e("h5", { ["style"]: ["float:left"] }, ["New question: "]),
-        e('input', { 'type': 'text', 'name': 'question' },),
+        e("input", { "type": "text", "name": "question" },),
             deleteButton]);
 
     return question
 }
 
-function Form() {
-    let nameForm = e('form', { 'id': 'readroot' },
+function QuestionFormName(){
+    return e("form", { "id": "readroot" },
         [e("h3", {}, ["TITLE: "]),
-        e('input', { 'type': 'text', 'name': 'usrtitle' },)]);
+        e("input", { "type": "text", "name": "usrtitle" },)]);
+}
+
+function Form(formName, formHandler) {
+    let nameForm = formName()
     headerContainer.appendChild(nameForm)
 
-    let question = QuestionForm()
-
+    let question = formHandler()
     headerContainer.appendChild(question)
 }
 
@@ -211,7 +232,7 @@ function refresh() {
         case "home":
             {
 
-                HeaderHome()
+                Header(HeaderHome)
                 AddButton(NewQuiz)
                 Quizzez()
                 break
@@ -219,17 +240,20 @@ function refresh() {
 
         case "create":
             {
-                HeaderCreate()
-                SubmitButton(Submit);
+                Header(HeaderCreate)
+                SubmitButton(SubmitQuestionForm)
                 BackButton(BackHome)
-                Form()
+                Form(QuestionFormName, QuestionForm)
                 AddQuestionButton(MoreFields)
                 break
             }
 
         case "Run":
             {
-                HeaderRun()
+                Header(HeaderRun)
+                SubmitButton(SubmitAnswerForm)
+                BackButton(BackHome)
+                Form(AnswerFormName, AnswerForm)
 
             }
 
