@@ -60,6 +60,15 @@ body {
     box-sizing: border-box;
   }
 
+  input[name^="answer"]{
+    font-size: 25px;
+    width: 70%;
+    float:left;
+    padding: 12px 20px;
+    margin: 8px 12px;
+    box-sizing: border-box;
+  }
+
   input[id^="deleteQuestion"]{
     background-color: #000000;
     border: none;

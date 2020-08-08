@@ -1,6 +1,8 @@
 const state = {
     page: "home",
-    allQuizzez: []
+    allQuizzez: [],
+    allAnswers:[],
+    curentQuizID:''
 }
 
 var questionsCounter = 0
@@ -68,6 +70,7 @@ function Quizzez() {
 
 function RUN() {
     state.page = "Run"
+    state.curentQuizID = this.parentNode.id
     refresh();
 }
 
@@ -86,11 +89,25 @@ function SubmitAnswerForm(){
     var form = document.getElementById('readroot');
     var text = form['usrtitle'];
     var titleName = text.value;
+    var form = document.querySelectorAll("input[name='answer']")
+    var usrAnswers = []
+    form.forEach(element => usrAnswers.push(element.value))
 
-    var form = document.querySelectorAll("input[name='question']")
-    var usrQuestions = []
-    form.forEach(element => usrQuestions.push(element.value))
-    state.allQuizzez[titleName] = [usrQuestions]
+    var nameAnswers = {}
+    nameAnswers[titleName] = usrAnswers
+    var resultList = []
+    resultList.push(nameAnswers)
+
+    if (state.curentQuizID in state.allAnswers){
+
+        
+        state.allAnswers[state.curentQuizID].push(nameAnswers)
+    }
+    else{
+        state.allAnswers[state.curentQuizID] = []
+        state.allAnswers[state.curentQuizID].push(nameAnswers)
+    }
+
     BackHome()
 }
 
@@ -215,6 +232,31 @@ function QuestionForm() {
 function QuestionFormName(){
     return e("form", { "id": "readroot" },
         [e("h3", {}, ["TITLE: "]),
+        e("input", { "type": "text", "name": "usrtitle" },)]);
+}
+
+function AnswerForm(){
+    let index = 0
+    let answerForms= e('form', { 'id': 'writeroot' },)
+
+    state.allQuizzez[state.curentQuizID].forEach(element => 
+        element.forEach(question =>{
+        index++
+        var answer = e('form', { 'id': 'writeroot'+ index },
+        [e("h5", { ["style"]: ["float:left","clear:both" ] }, 
+        [e("h3", {}, question),
+        e("input", { "type": "text", "name": "answer" },)])]);
+        answerForms.appendChild(answer)
+        }
+        
+    ));
+    
+    return answerForms
+}
+
+function AnswerFormName(){
+    return e("form", { "id": "readroot" },
+        [e("h3", {}, ["Your Name: "]),
         e("input", { "type": "text", "name": "usrtitle" },)]);
 }
 
