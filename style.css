@@ -89,6 +89,13 @@ body {
     
   }
 
+  #AnswersTags{
+    clear: both;
+    padding: 15px 32px;
+    margin: 40px 10px;
+    border: 1px solid black;
+  }
+
   #empty{
     float:right;
     padding: 15px 32px;
@@ -105,6 +112,7 @@ body {
     margin-left: 15px;
     
   }
+
 
   header[id^="questionsTags"]{
     border: 1px solid black;

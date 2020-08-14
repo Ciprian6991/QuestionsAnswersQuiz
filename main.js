@@ -1,8 +1,16 @@
 const state = {
     page: "home",
-    allQuizzez: [],
-    allAnswers:[],
-    curentQuizID:''
+    allQuizzez: {
+        'Masini': ['Ce marca?', 'Ce vechime?', 'Ce culoare?'],
+        'Mancare': ['Fructe sau legume?', 'Cate calorii mananci pe zi?', 'Suc sau apa?']
+    },
+    allAnswers: {
+        'Masini': {
+            'Adrian': ['Skoda', '12 ani', 'Gri'],
+            'Sabin': ['VW', '1 an', 'Negru']
+        }
+    },
+    curentQuizID: ''
 }
 
 var questionsCounter = 0
@@ -56,9 +64,11 @@ function Quizzez() {
             let edit = EditQuizButton()
             let run = RunQuizButton(RUN)
             let del = DeleteQuizButton(DeleteQiuz)
+            let res = ResultQuizButton(RESULTS)
 
-            var questionArticle = e("header", { "id": key, "value" : "questionTag" },
+            var questionArticle = e("header", { "id": key, "value": "questionTag" },
                 [e("h1", {}, [key]),
+                    res,
                     del,
                     edit,
                     run]);
@@ -66,6 +76,12 @@ function Quizzez() {
         }
         headerContainer.appendChild(quizzzez)
     }
+}
+
+function RESULTS() {
+    state.page = "Results"
+    state.curentQuizID = this.parentNode.id
+    refresh();
 }
 
 function RUN() {
@@ -85,7 +101,7 @@ function BackHome() {
     refresh()
 }
 
-function SubmitAnswerForm(){
+function SubmitAnswerForm() {
     var form = document.getElementById('readroot');
     var text = form['usrtitle'];
     var titleName = text.value;
@@ -93,19 +109,14 @@ function SubmitAnswerForm(){
     var usrAnswers = []
     form.forEach(element => usrAnswers.push(element.value))
 
-    var nameAnswers = {}
-    nameAnswers[titleName] = usrAnswers
-    var resultList = []
-    resultList.push(nameAnswers)
+    if (state.curentQuizID in state.allAnswers) {
 
-    if (state.curentQuizID in state.allAnswers){
 
-        
-        state.allAnswers[state.curentQuizID].push(nameAnswers)
+        state.allAnswers[state.curentQuizID][titleName] = usrAnswers
     }
-    else{
-        state.allAnswers[state.curentQuizID] = []
-        state.allAnswers[state.curentQuizID].push(nameAnswers)
+    else {
+        state.allAnswers[state.curentQuizID] = {}
+        state.allAnswers[state.curentQuizID][titleName] = usrAnswers
     }
 
     BackHome()
@@ -119,7 +130,7 @@ function SubmitQuestionForm() {
     var form = document.querySelectorAll("input[name='question']")
     var usrQuestions = []
     form.forEach(element => usrQuestions.push(element.value))
-    state.allQuizzez[titleName] = [usrQuestions]
+    state.allQuizzez[titleName] = usrQuestions
     BackHome()
 
 }
@@ -138,8 +149,9 @@ function DeleteField() {
     node.remove()
 }
 
-function DeleteQiuz(){
+function DeleteQiuz() {
     delete state.allQuizzez[this.parentNode.id];
+    delete state.allAnswers[this.parentNode.id]
     this.parentNode.remove()
     refresh()
 }
@@ -188,8 +200,14 @@ function DeleteQuizButton(clickHandler) {
     return button
 }
 
-function Header(headerHandler){
-    headerContainer.innerHTML=''
+function ResultQuizButton(clickHandler) {
+    let button = e("input", { "type": "button", "id": "deleteQuiz", "value": "RESULTS", click: clickHandler },)
+
+    return button
+}
+
+function Header(headerHandler) {
+    headerContainer.innerHTML = ''
 
     var header = headerHandler()
     headerContainer.appendChild(header);
@@ -213,6 +231,11 @@ function HeaderRun() {
     return header
 }
 
+function HeaderResult() {
+    let header = e("header", {}, [e("h1", {}, ["Results for " + state.curentQuizID])])
+    return header
+}
+
 function HeaderCreate() {
 
     let header = e("header", {}, [e("h1", {}, ["Create"])])
@@ -229,32 +252,31 @@ function QuestionForm() {
     return question
 }
 
-function QuestionFormName(){
+function QuestionFormName() {
     return e("form", { "id": "readroot" },
         [e("h3", {}, ["TITLE: "]),
         e("input", { "type": "text", "name": "usrtitle" },)]);
 }
 
-function AnswerForm(){
+function AnswerForm() {
     let index = 0
-    let answerForms= e('form', { 'id': 'writeroot' },)
+    let answerForms = e('form', { 'id': 'writeroot' },)
 
-    state.allQuizzez[state.curentQuizID].forEach(element => 
-        element.forEach(question =>{
+    state.allQuizzez[state.curentQuizID].forEach(question => {
         index++
-        var answer = e('form', { 'id': 'writeroot'+ index },
-        [e("h5", { ["style"]: ["float:left","clear:both" ] }, 
-        [e("h3", {}, question),
-        e("input", { "type": "text", "name": "answer" },)])]);
+        var answer = e('form', { 'id': 'writeroot' + index },
+            [e("h5", { ["style"]: ["float:left", "clear:both"] },
+                [e("h3", {}, question),
+                e("input", { "type": "text", "name": "answer" },)])]);
         answerForms.appendChild(answer)
-        }
-        
-    ));
-    
+    }
+
+    );
+
     return answerForms
 }
 
-function AnswerFormName(){
+function AnswerFormName() {
     return e("form", { "id": "readroot" },
         [e("h3", {}, ["Your Name: "]),
         e("input", { "type": "text", "name": "usrtitle" },)]);
@@ -268,12 +290,46 @@ function Form(formName, formHandler) {
     headerContainer.appendChild(question)
 }
 
+function Result() {
+
+    if (isEmpty(state.allAnswers[state.curentQuizID])) {
+        let empty = e("header", { "id": "empty" }, [e("b", {}, ["No answers yet"])]);
+
+        headerContainer.appendChild(empty);
+    }
+    else {
+
+        let questionCounter = 0
+        
+        let answers = e("header", { "id": "questionsTags" });
+        for (let question in state.allQuizzez[state.curentQuizID]) {
+
+            let curentAnswers = e("ul", { "id": "answers", "value": "answersTag" },)
+
+            for(let user in state.allAnswers[state.curentQuizID]){
+                let answer = e("li", { "id": "answer" + user, "value": "answerTag" },
+                                user + ": " + state.allAnswers[state.curentQuizID][user][question])
+
+                curentAnswers.appendChild(answer)
+            }
+            
+
+            var answerArticle = e("label", { "id": "question" + questionCounter, "value": "questionTag" },
+                [e("h1", {}, state.allQuizzez[state.curentQuizID][question]),
+                curentAnswers]);
+            answers.appendChild(answerArticle)
+            questionCounter++
+        }
+        
+        headerContainer.appendChild(answers)
+    }
+}
+
 function refresh() {
 
     switch (state.page) {
         case "home":
             {
-
                 Header(HeaderHome)
                 AddButton(NewQuiz)
                 Quizzez()
@@ -296,7 +352,15 @@ function refresh() {
                 SubmitButton(SubmitAnswerForm)
                 BackButton(BackHome)
                 Form(AnswerFormName, AnswerForm)
+                break
+            }
 
+        case "Results":
+            {
+                Header(HeaderResult)
+                BackButton(BackHome)
+                Result()
+                break
             }
 
 
