@@ -301,7 +301,7 @@ function Result() {
 
         let questionCounter = 0
         
-        let answers = e("header", { "id": "questionsTags" });
+        let answers = e("header", { "id": "answersTags" });
         for (let question in state.allQuizzez[state.curentQuizID]) {
 
             let curentAnswers = e("ul", { "id": "answers", "value": "answersTag" },)
@@ -320,7 +320,7 @@ function Result() {
             answers.appendChild(answerArticle)
             questionCounter++
         }
-        
+
         headerContainer.appendChild(answers)
     }
 }
